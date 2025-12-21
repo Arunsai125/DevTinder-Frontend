@@ -19,9 +19,9 @@ const Login = () => {
 
   return (
     <div className="flex justify-center">
-      <div className="card bg-gray-900 w-96 shadow-sm m-24">
+      <div className="card bg-red-400 w-96 shadow-sm m-24">
         <div className="card-body items-center text-center">
-          <h1 className="card-title py-4 text-red-900 font-extrabold">
+          <h1 className="card-title py-4 text-black font-extrabold">
             DevTinder - Portal
           </h1>
           <label className="input validator my-1">
@@ -43,7 +43,7 @@ const Login = () => {
             </svg>
             <input
               type="email"
-              placeholder="mail@site.com"
+              placeholder="mail@devtinder.com"
               value={emailId}
               onChange={(e) => setEmailId(e.target.value)}
               required
@@ -86,7 +86,10 @@ const Login = () => {
             At least one uppercase letter
           </p>
           <div className="card-actions">
-            <button className="btn btn-primary px-4" onClick={handleLogin}>
+            <button
+              className="btn btn-primary px-4 bg-black"
+              onClick={handleLogin}
+            >
               Login
             </button>
           </div>
