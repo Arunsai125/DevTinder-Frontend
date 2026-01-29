@@ -4,8 +4,8 @@ import { useDispatch } from "react-redux";
 import { addUser } from "./utils/userSlice";
 
 const Login = () => {
-  const [emailId, setEmailId] = useState("");
-  const [password, setPassword] = useState("");
+  const [emailId, setEmailId] = useState("arunsaiknr@gmail.com");
+  const [password, setPassword] = useState("Bhagavathi@321");
   const dispatch = useDispatch();
   const handleLogin = async () => {
     try {
@@ -15,7 +15,7 @@ const Login = () => {
         { withCredentials: true }
       );
       console.log(res);
-      dispatch(addUser(res.data));
+      dispatch(addUser(res.data.data));
     } catch (err) {
       console.error(err.message);
     }
