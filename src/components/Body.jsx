@@ -8,20 +8,23 @@ import { addUser } from "../utils/userSlice";
 import { useEffect } from "react";
 
 const Body = () => {
+  const userData = useSelector((store) => store.user);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const fetch = async () => {
-    if (userData) return;
     try {
-      const res = await axios.get(BASE_URL + "/profile/view");
-      useDispatch(addUser(res));
+      const res = await axios.get(BASE_URL + "/profile/view", {
+        withCredentials: true,
+      });
+      dispatch(addUser(res.data));
     } catch (err) {
-      if (err.status === 401) {
-        useNavigate("/login");
+      if (err.response?.status === 401) {
+        navigate("/login");
       }
       console.error(err);
     }
   };
 
-  const userData = useSelector((store) => store.user);
   useEffect(() => {
     fetch();
   }, []);
