@@ -8,6 +8,7 @@ import { BASE_URL } from "../utils/constants";
 const Login = () => {
   const [emailId, setEmailId] = useState("arunsaiknr@gmail.com");
   const [password, setPassword] = useState("Bhagavathi@321");
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogin = async () => {
@@ -21,6 +22,7 @@ const Login = () => {
       dispatch(addUser(res.data.data));
       return navigate("/feed");
     } catch (err) {
+      setError(err?.response?.data || "SOMETHING WENT WRONG");
       console.error(err.message);
     }
   };
@@ -93,6 +95,7 @@ const Login = () => {
             At least one lowercase letter <br />
             At least one uppercase letter
           </p>
+          <p className="text-black">{error}</p>
           <div className="card-actions">
             <button
               className="btn btn-primary px-4 bg-black"
