@@ -3,7 +3,7 @@ import Footer from "./Footer";
 import { Outlet, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { useEffect } from "react";
 
@@ -19,8 +19,10 @@ const Body = () => {
       console.error(err);
     }
   };
+
+  const userData = useSelector((store) => store.user);
   useEffect(() => {
-    fetch();
+    if (!userData) fetch();
   }, []);
   return (
     <div>
