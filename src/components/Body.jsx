@@ -9,6 +9,7 @@ import { useEffect } from "react";
 
 const Body = () => {
   const fetch = async () => {
+    if (userData) return;
     try {
       const res = await axios.get(BASE_URL + "/profile/view");
       useDispatch(addUser(res));
@@ -22,7 +23,7 @@ const Body = () => {
 
   const userData = useSelector((store) => store.user);
   useEffect(() => {
-    if (!userData) fetch();
+    fetch();
   }, []);
   return (
     <div>
