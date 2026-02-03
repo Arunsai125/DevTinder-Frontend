@@ -61,7 +61,9 @@ const EditProfile = ({ user }) => {
               </div>
             ))}
           </div>
-
+          {error && (
+            <p className="text-red-700 text-sm text-center mt-3">{error}</p>
+          )}
           <div className="card-actions justify-center mb-6">
             <button
               className="btn bg-black text-white px-6"
