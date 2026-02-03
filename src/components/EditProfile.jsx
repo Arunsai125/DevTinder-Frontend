@@ -13,129 +13,66 @@ const EditProfile = ({ user }) => {
   const [about, setAbout] = useState(user?.about || "");
   const [gender, setGender] = useState(user?.gender || "");
   const [photoUrl, setPhotoUrl] = useState(user?.photoUrl || "");
-  const [error, setError] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
-    try {
-      const res = await axios.patch(
-        `${BASE_URL}/profile/edit`,
-        { firstName, lastName, age, photoUrl, gender, about },
-        { withCredentials: true }
-      );
+    const res = await axios.patch(
+      `${BASE_URL}/profile/edit`,
+      { firstName, lastName, age, about, gender, photoUrl },
+      { withCredentials: true }
+    );
 
-      dispatch(addUser(res.data.data));
-      navigate("/feed");
-    } catch (err) {
-      setError(err?.response?.data?.message || "Something went wrong");
-    }
+    dispatch(addUser(res.data.data));
+    navigate("/feed");
   };
 
   return (
-    <div className="pb-40 flex justify-center">
-      <div className="flex items-stretch gap-16">
-        <div className="card bg-red-400 w-96 shadow-sm m-16">
-          <div className="card-body">
+    <div className="pb-40 flex justify-center min-h-screen pt-[50px]">
+      <div className="flex gap-16 items-stretch">
+        {/* LEFT CARD */}
+        <div className="card bg-red-400 w-96 shadow-sm h-[600px] flex flex-col">
+          <div className="card-body flex-1">
             <h1 className="card-title py-4 text-black font-extrabold text-center">
               My Profile
             </h1>
 
-            <div className="form-control w-full">
-              <label className="label">
-                <span className="label-text text-black font-semibold">
-                  First Name
-                </span>
-              </label>
-              <input
-                type="text"
-                className="input input-bordered bg-slate-800 text-white w-full p-2"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-            </div>
+            {[
+              ["First Name", firstName, setFirstName],
+              ["Last Name", lastName, setLastName],
+              ["Age", age, setAge, "number"],
+              ["About", about, setAbout],
+              ["Gender", gender, setGender],
+              ["Photo URL", photoUrl, setPhotoUrl],
+            ].map(([label, value, setter, type = "text"]) => (
+              <div key={label} className="form-control w-full">
+                <label className="label">
+                  <span className="label-text text-black font-semibold">
+                    {label}
+                  </span>
+                </label>
+                <input
+                  type={type}
+                  className="input input-bordered bg-slate-800 text-white w-full p-2"
+                  value={value}
+                  onChange={(e) => setter(e.target.value)}
+                />
+              </div>
+            ))}
+          </div>
 
-            <div className="form-control w-full">
-              <label className="label">
-                <span className="label-text text-black font-semibold">
-                  Last Name
-                </span>
-              </label>
-              <input
-                type="text"
-                className="input input-bordered bg-slate-800 text-white w-full p-2"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-              />
-            </div>
-
-            <div className="form-control w-full">
-              <label className="label">
-                <span className="label-text text-black font-semibold">Age</span>
-              </label>
-              <input
-                type="number"
-                min="18"
-                className="input input-bordered bg-slate-800 text-white w-full p-2"
-                value={age}
-                onChange={(e) => setAge(e.target.value)}
-              />
-            </div>
-
-            <div className="form-control w-full">
-              <label className="label">
-                <span className="label-text text-black font-semibold">
-                  About
-                </span>
-              </label>
-              <input
-                type="text"
-                className="input input-bordered bg-slate-800 text-white w-full p-2"
-                value={about}
-                onChange={(e) => setAbout(e.target.value)}
-              />
-            </div>
-
-            <div className="form-control w-full">
-              <label className="label">
-                <span className="label-text text-black font-semibold">
-                  Gender
-                </span>
-              </label>
-              <input
-                type="text"
-                className="input input-bordered bg-slate-800 text-white w-full p-2"
-                value={gender}
-                onChange={(e) => setGender(e.target.value)}
-              />
-            </div>
-
-            <div className="form-control w-full">
-              <label className="label">
-                <span className="label-text text-black font-semibold">
-                  Photo URL
-                </span>
-              </label>
-              <input
-                type="text"
-                className="input input-bordered bg-slate-800 text-white w-full p-2"
-                value={photoUrl}
-                onChange={(e) => setPhotoUrl(e.target.value)}
-              />
-            </div>
-
-            <div className="card-actions mt-6 justify-center">
-              <button
-                className="btn bg-black text-white px-6"
-                onClick={handleSubmit}
-              >
-                SUBMIT
-              </button>
-            </div>
+          <div className="card-actions justify-center mb-6">
+            <button
+              className="btn bg-black text-white px-6"
+              onClick={handleSubmit}
+            >
+              SUBMIT
+            </button>
           </div>
         </div>
 
+        {/* RIGHT CARD */}
         <UserCard
           user={{ firstName, lastName, age, about, gender, photoUrl }}
         />
