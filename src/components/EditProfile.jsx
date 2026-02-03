@@ -13,6 +13,7 @@ const EditProfile = ({ user }) => {
   const [about, setAbout] = useState(user?.about || "");
   const [gender, setGender] = useState(user?.gender || "");
   const [photoUrl, setPhotoUrl] = useState(user?.photoUrl || "");
+  const [error, setError] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
