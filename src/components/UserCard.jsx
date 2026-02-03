@@ -12,6 +12,10 @@ const UserCard = ({ user }) => {
           {user.firstName} {user.lastName}
         </h2>
 
+        <p className="text-sm opacity-80">
+          {user.age} years • {user.gender}
+        </p>
+
         <p>{user.about}</p>
 
         <div className="card-actions justify-center p-2">
