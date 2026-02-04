@@ -58,11 +58,6 @@ const Connections = () => {
                 </p>
 
                 <p className="text-sm mt-2">{about}</p>
-
-                <div className="card-actions mt-4">
-                  <button className="btn btn-primary btn-sm">Message</button>
-                  <button className="btn btn-outline btn-sm">Remove</button>
-                </div>
               </div>
             </div>
           );
