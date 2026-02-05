@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { addRequest } from "../utils/requestSlice";
+import { addRequest, removeRequest } from "../utils/requestSlice";
 
 const Requests = () => {
   const dispatch = useDispatch();
@@ -18,6 +18,20 @@ const Requests = () => {
       console.error(err.message);
     }
   };
+
+  const manageRequest = async (status, id) => {
+    try {
+      const res = await axios.post(
+        BASE_URL + "/request/review/" + status + "/" + id,
+        {},
+        { withCredentials: true }
+      );
+      dispatch(removeRequest(id));
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
   useEffect(() => {
     fetchRequests();
   }, []);
@@ -34,11 +48,21 @@ const Requests = () => {
 
       <div className="flex flex-wrap justify-center gap-8">
         {totalRequests.map((request) => {
-          const { _id, firstName, lastName, age, gender, photoUrl, about } =
-            request.fromUserId;
+          const user = request.fromUserId;
+          const {
+            _id: userId,
+            firstName,
+            lastName,
+            age,
+            gender,
+            photoUrl,
+            about,
+          } = user;
 
+          const requestId = request._id;
+          if (!user) return null;
           return (
-            <div key={_id} className="card w-80 bg-base-100 shadow-xl">
+            <div key={requestId} className="card w-80 bg-base-100 shadow-xl">
               <figure className="px-6 pt-6">
                 <img
                   src={photoUrl}
@@ -59,10 +83,20 @@ const Requests = () => {
                 <p className="text-sm mt-2">{about}</p>
               </div>
               <div className="card-actions justify-center gap-3 pb-6 px-4">
-                <button className="btn btn-outline btn-error btn-md w-28 md:w-32">
+                <button
+                  className="btn btn-outline btn-error btn-md w-28 md:w-32"
+                  onClick={() => {
+                    manageRequest("rejected", requestId);
+                  }}
+                >
                   Reject
                 </button>
-                <button className="btn btn-primary btn-md w-28 md:w-32">
+                <button
+                  className="btn btn-primary btn-md w-28 md:w-32"
+                  onClick={() => {
+                    manageRequest("accepted", requestId);
+                  }}
+                >
                   Accept
                 </button>
               </div>
