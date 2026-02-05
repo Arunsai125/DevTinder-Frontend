@@ -6,11 +6,17 @@ import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 
 const Login = () => {
-  const [emailId, setEmailId] = useState("arunsaiknr@gmail.com");
-  const [password, setPassword] = useState("Bhagavathi@321");
+  const [isLoginForm, setIsLoginForm] = useState(true);
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [emailId, setEmailId] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const handleLogin = async () => {
     try {
       const res = await axios.post(
@@ -19,10 +25,28 @@ const Login = () => {
         { withCredentials: true }
       );
       dispatch(addUser(res.data.data));
-      return navigate("/feed");
+      navigate("/feed");
     } catch (err) {
       setError(err?.response?.data || "SOMETHING WENT WRONG");
-      console.error(err.message);
+    }
+  };
+
+  const handleSignup = async () => {
+    try {
+      await axios.post(
+        BASE_URL + "/signup",
+        {
+          firstName,
+          lastName,
+          emailId,
+          password,
+        },
+        { withCredentials: true }
+      );
+      setIsLoginForm(true);
+      setError("Signup successful. Please login.");
+    } catch (err) {
+      setError(err?.response?.data || "SOMETHING WENT WRONG");
     }
   };
 
@@ -33,23 +57,28 @@ const Login = () => {
           <h1 className="card-title py-4 text-black font-extrabold">
             DevTinder - Portal
           </h1>
-          <label className="input validator my-1">
-            <svg
-              className="h-[1em] opacity-50"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-            >
-              <g
-                strokeLinejoin="round"
-                strokeLinecap="round"
-                strokeWidth="2.5"
-                fill="none"
-                stroke="currentColor"
-              >
-                <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-              </g>
-            </svg>
+
+          {!isLoginForm && (
+            <>
+              <input
+                type="text"
+                placeholder="First Name"
+                className="input input-bordered w-full my-1 px-3"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+
+              <input
+                type="text"
+                placeholder="Last Name"
+                className="input input-bordered w-full my-1 px-3"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
+            </>
+          )}
+
+          <label className="input validator my-1 w-full">
             <input
               type="email"
               placeholder="mail@devtinder.com"
@@ -58,24 +87,8 @@ const Login = () => {
               required
             />
           </label>
-          <div className="validator-hint hidden">Enter valid email address</div>
-          <label className="input validator my-4">
-            <svg
-              className="h-[1em] opacity-50"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-            >
-              <g
-                strokeLinejoin="round"
-                strokeLinecap="round"
-                strokeWidth="2.5"
-                fill="none"
-                stroke="currentColor"
-              >
-                <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"></path>
-                <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle>
-              </g>
-            </svg>
+
+          <label className="input validator my-1 w-full">
             <input
               type="password"
               required
@@ -84,25 +97,28 @@ const Login = () => {
               placeholder="Password"
               minLength="8"
               pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-              title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
             />
           </label>
-          <p className="validator-hint hidden">
-            Must be more than 8 characters, including
-            <br />
-            At least one number <br />
-            At least one lowercase letter <br />
-            At least one uppercase letter
-          </p>
-          <p className="text-black">{error}</p>
-          <div className="card-actions">
+
+          <p className="text-black text-sm">{error}</p>
+
+          <div className="card-actions mt-2">
             <button
-              className="btn btn-primary px-4 bg-black"
-              onClick={handleLogin}
+              className="btn btn-primary px-6 bg-black"
+              onClick={isLoginForm ? handleLogin : handleSignup}
             >
-              Login
+              {isLoginForm ? "Login" : "Signup"}
             </button>
           </div>
+
+          <p
+            className="cursor-pointer text-sm mt-3 text-black"
+            onClick={() => setIsLoginForm((v) => !v)}
+          >
+            {isLoginForm
+              ? "New user? Signup here"
+              : "Already have an account? Login"}
+          </p>
         </div>
       </div>
     </div>
