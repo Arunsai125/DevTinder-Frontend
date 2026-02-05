@@ -10,5 +10,5 @@ const requestSlice = createSlice({
     }
 });
 
-export const {addRequest} = createSlice.actions;
-export default createSlice.reducer;
+export const {addRequest} = requestSlice.actions;
+export default requestSlice.reducer;
